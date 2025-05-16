@@ -1,0 +1,442 @@
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+    list-style: none;
+    font-family: "Montserrat", sans-serif;
+}
+
+body{
+    background-color: #0f0f1e;
+    color:white;
+    font-size: 16px;
+    overflow: hidden; /*esconde o scrool */
+}
+
+header{
+
+    position: fixed; /*deixa ele fixo*/
+    top:0;
+    padding: 20px 50px; /* espaçamento aos lados */
+    display: flex;
+    justify-content: space-between; /*distancia os elementos */
+    width: 90vw; /* largura do header, ai ele vai ficar no canto direito */
+    align-items: center;
+    z-index: 3; /* garantir que vai ficar na frente de todos */
+}
+
+.logo{
+
+    font-family: "Orbitron", sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color:#00f7ff;
+    text-shadow: 0 0 10px rgba(0, 247, 255, 0.5); /*Pequeno efeito ao redor das letras */
+    cursor: pointer;
+    transition: 1s ease; /*duração da transição */
+}
+
+/*efeito do mouse ao passar encima, ele muda a escala e o sei eixo Y */
+.logo:hover{
+
+    transform:scale(0.9)translateY(10px);
+    text-shadow: 0 0 50px rgba(0, 247, 255, 0.5)
+    
+    
+}
+
+/*estilizando a ul */
+header nav ul{
+
+    display: flex; /*um elemento ao lado do outro */
+    gap: 48px; /*distanciamento entre eles */
+}
+
+/*estilizando a li */
+header nav ul li{
+
+    cursor: pointer;
+    position: relative; /*vai facilitar o posicionamento seguinte */
+    padding: 8px 0; /*8 pixels encima e emabixo dos lados é 0  */
+
+
+}
+
+/*efeito do sombreamento abaixo do home, produtos e contato */
+header nav ul li::after{
+
+    content: ''; /*conteúdo 0, se colocar por exemplo frank, ele irá aparecer logo após os menus. Então coloca 0 */
+    position: absolute; /*permite voce colocar o elemento onde quer, no caso em relaçao ao pai sendo que la encima esta relative */
+    left: 0;
+    bottom: 0;
+    width: 0px;
+    height: 2px;
+    background-color: #00f7ff;
+    transition: width 0.5s ease; /*efeito aplicado no width com tempo de 0.5s ao passar o mouse ele fica passando */
+    
+}
+
+/*efeito só vai ser aplicado ao passar o mouse encima dos menus, mudando o width */
+header nav ul li:hover::after{
+
+    width: 100%;
+}
+
+/*vamos estilizar o efeito de um circulo ao fundo da pagina */
+.container{
+
+    height: 100vh;
+    position: relative;
+    background: linear-gradient(135deg, #0f0f1e 0%, #1f1f3a 100%); /*vai desenhar um degradê */
+    overflow: hidden;
+}
+
+.container::before{
+
+    content: '';    
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 247, 255, 0.2)0%, rgba(15,15,30,0) 70%); /*vai desenhar o circulo ao fundo*/
+    position:absolute;
+    /*posiciona o top e o lado esquerdo tentando por ele mais ao centro, mas nao fica tao certinho, só usando o transform abaixo */
+    top:50%; 
+    left:50%;
+    transform: translate(-50%, -50%); /*deixa ele realmente posicionado no centro */
+    filter: blur(50px);
+    z-index: 1;
+    animation: pulse 4s infinite alternate; /*animação de 4s usando o pulse definido abaixo, ele será infinito e alternativo*/
+
+}
+
+/* efeito do pulsamento, depois é utilizado no animation no before acima para definir o seu tempo */
+@keyframes pulse{
+
+    /*no inicio da animação no 0% ele terá essas propriedades abaixo */
+    0%{
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+
+    /*no final da animação n 100%, ele vai aumentar a opaciade e sua escala */
+    100%{
+        opacity: 1;
+        transform: translate(-50%,-50%) scale(1.5);
+    }
+
+}
+/*estilizando a lista dos produtos */
+.list{
+    width: 80%;
+    height: 100%;
+    margin: 0 auto; /*0 encima e embaixo, lados automatico */
+    position: relative;
+
+}
+
+/*estilizando o item */
+.item{
+    position: absolute;
+    inset: 0; /*todos os valores para todas as direções 0 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* vai sumir os produtos, as imagens. Vai aparecer só uma pois o JS que vai fazer a troca */
+
+    /*ANIMAÇÃO NA TROCA DAS IMAGENS DEPOIS QUE FAZ ELA NO JAVA SCRIPT */
+    transform: translateX(100vw);
+    transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out; /*faz as passagens das trocas mais suaves */
+}
+
+/*estilizando o active */
+.active{
+    opacity: 1; /*aqui ele vai voltar a aparecer mas o que tiver ativo */
+    transform: translateX(0);
+}
+
+/*estilizando o product img*/
+.product-img{
+    width: 45%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2; /*Vai ficar a frente do efeito do circulo */
+
+}
+
+/*estilizando a imagem */
+.product-img img{
+
+    max-width: 80%;
+    max-height: 60%;
+    filter: drop-shadow(0 0 30px rgba(0, 247, 255, 0.3)); /*cria um sombreamento ao redor da imagem */
+
+   
+    /*ANIMAÇÃO IMAGEM COM OS ITENS, QUANDO ELE TA SUMIDO */
+    transform: translateX(200px); /*efeito da imagem ir para o lado, quanto maior mais irá ter o efeito de sair para o lado */
+    opacity: 0; /*aqui ele estara sumido e mais pro lado após o transition abaixo */
+    transition: transform 0.6s ease, opacity 0.6s ease; /*tempo do transform e da opacidade */
+    transition-delay: 0.5s; /*delay onde voce percebe a imagem chegando um pouco atrasada */
+
+
+}
+
+/*CONTINUANDO A ANIMAÇÃO...QUANDO ELA TIVER ATIVA MUDA A OPACIDADE E VOLTA NA POSIÇÃO ORIGINAL */
+.active .product-img img{
+
+    transform: translateX(0); /*voltando pra posição original */
+    opacity: 1; /*aqui ele ira mostrar a imagem aplicando os tempos dos transform acima */
+}
+
+
+
+/*estilizando a div */
+.content{
+
+    width: 55%;
+    padding-right:80px; /*só para a direita */
+    display:flex;
+    align-items: flex-start;/*começa da esquerda */
+    z-index: 2; /*vai ficar sobre o circulo */
+    flex-direction: column; /*pra ficar um encima do outro */
+}
+
+/*estilizando o texto do product-tag */
+.product-tag{
+    font-size: 1rem;
+    text-transform: uppercase;
+    color:#00f7ff;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+/*esiliando  nome do prduto */
+.product-name{
+    font-size:4.5rem; /* tamanho da fonte*/
+    font-family: "Orbitron", sans-serif;
+    line-height: 1.1; /*tamanho, alura da linha */
+    margin-bottom: 20px; /*distancia entre os elementos abaixo*/
+
+     /*ANIMAÇÃO DO NOME DO PRODUTO */
+    transform: translateX(200px); /*efeito do nome ir para o lado, quanto maior mais irá ter o efeito de sair para o lado */
+    opacity: 0; /*aqui ele estara sumido e mais pro lado após o transition abaixo */
+    transition: transform 0.6s ease, opacity 0.6s ease; /*tempo do transform e da opacidade */
+    transition-delay: 0.5s; /*delay onde voce percebe o texto chegando um pouco atrasada */
+
+
+}
+
+/*CONTINUANDO A ANIMAÇÃO...QUANDO ELA TIVER ATIVA MUDA A OPACIDADE E VOLTA NA POSIÇÃO ORIGINAL */
+.active .product-name{
+
+    transform: translateX(0); /*voltando pra posição original */
+    opacity: 1; /*aqui ele ira mostrar a o texto aplicando os tempos dos transform acima */
+}
+
+/*estilizando o a descrição */
+.descricao{
+
+    font-size: 1.1rem;
+    color:#b8b8d0;
+    line-height: 1.6;/*tamanho, alura da linha */
+    margin-bottom: 30px;/*distancia entre os elementos abaixo*/
+    max-width: 600px; /*tamanho maximo do width*/
+
+     /*ANIMAÇÃO DO NOME DA DESCRIÇÃO */
+    transform: translateX(200px); /*efeito da descrição ir para o lado, quanto maior mais irá ter o efeito de sair para o lado */
+    opacity: 0; /*aqui ele estara sumido e mais pro lado após o transition abaixo */
+    transition: transform 0.6s ease, opacity 0.6s ease; /*tempo do transform e da opacidade */
+    transition-delay: 0.5s; /*delay onde voce percebe a descrição chegando um pouco atrasada */
+
+
+}
+
+/*CONTINUANDO A ANIMAÇÃO...QUANDO ELA TIVER ATIVA MUDA A OPACIDADE E VOLTA NA POSIÇÃO ORIGINAL */
+.active .descricao{
+
+    transform: translateX(0); /*voltando pra posição original */
+    opacity: 1; /*aqui ele ira mostrar a descrição aplicando os tempos dos transform acima */
+}
+
+
+/*estilizando o botao */
+.btn-mais{
+
+    padding: 12px 16px; /* 12px encima e embaix0, 10px do lado */
+    background: linear-gradient(90deg, #00f7ff, #06ff);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: aliceblue;
+    border:none;
+    transition: 2s ease;
+
+}
+/*efeito do mouse passando pelo botao */
+.btn-mais:hover{
+
+    background: #0f0f1e;
+    border: 2px solid white;
+
+}
+
+.arrows{
+    position: absolute;
+    width: 90%;
+    display: flex;
+    justify-content: space-between; /*para colocar cada seta de um lado */
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 5; /*para ficar a frente de todos */
+}
+
+/*estilizando os botoes laterais */
+.arrow-btn{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 247, 255, 0.3);
+    color:aliceblue;
+
+}
+
+.arrow-btn:hover{
+
+    background-color: #00f7ff;
+    border: 3px solid rgba(30, 7, 236, 0.3);
+    
+}
+
+/*aqui seria os indicadores que ficam abaixo das imagens */
+.indicators{
+
+    position: absolute;/*ajuda a colocar onde quiser */
+    bottom: 40px;/*para descer ele abaixo das imagens */
+    left: 50%;/*para centraliar ele */
+    transform: translateX(-50%); /* alinhando no eixo X ao centro*/
+    display: flex;
+    flex-direction: column;/*pra ficar um item abaixo do outro */
+    align-items: center; /*alinhar ao centro */
+    gap: 15px; /*espaçamento entre eles */
+    z-index: 5; /*garantir ele a frente de todos */
+}
+
+.numbers{
+
+    font-family: "Orbitron", sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(255, 255 ,255,0.2);
+
+}
+
+.dots{
+
+    display: flex;
+    gap:10px;
+}
+
+/*os indicadores abaixo do numero */
+.dot{
+
+    width: 40px;
+    height: 4px;
+    background-color: rgba(255, 255 ,255,0.2);
+    border-radius: 2px;
+
+
+}
+/*aqui é quando apena um dot no caso um indicador está ativo (selecionado), por exemplo... imagem do relogio sera o 01 ativo */
+.dot.active{
+
+    background-color: #00f7ff;
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+
+}
+
+/*div dos circulos ocupando todo espaço */
+.tech-circle{
+
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circle{
+
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 247, 255, 0.2);
+}
+
+/*pegando o primeiro circulo e definindo o seu tamanho */
+.circle:nth-child(1){
+
+    width: 200px;
+    height: 200px;
+    top:10%;
+    left: 15%;
+
+}
+
+.circle:nth-child(1):hover{
+    
+    box-shadow: 0 0 30px rgba(71, 235, 240, 0.5);
+    
+}
+
+/*segundo circulo */
+ .circle:nth-child(2){
+
+    width: 250px;
+    height: 250px;
+    top:60%;
+    left: 60%;
+    bottom: 50%;
+    left: 25%;
+
+}         
+
+/*terceiro circulo */
+.circle:nth-child(3){
+
+    width: 280px;
+    height: 280px;
+    top:  65%;
+    left: 50%;
+    left: 80%;
+
+}                 
+
+/* quarto circulo */
+.circle:nth-child(4){
+
+    width: 200px;
+    height: 200px;
+    top:  15%;
+    left: 60%;
+    left: 90%;
+
+}                 
+
+
+/* */
+
+
+
+/* */
+
+
+
+
+
+
