@@ -1,13 +1,13 @@
 //variaveis para mapear os botoes antes e depois
-const prevButton = document.getElementById('prev')
-const nextButton = document.getElementById('next')
-const items = document.querySelectorAll('.item') // aqui vai pegar todos os items, detalhe tem que por o "ponto". Pois é classe.
-const dots = document.querySelectorAll('.dot') //vai pegar os dots
-const numberIndicator = document.querySelector('.numbers') // pega os numeros
-const list = document.querySelector('.list') //pegando a lista
+const prevButton = document.getElementById('prev');
+const nextButton = document.getElementById('next');
+const items = document.querySelectorAll('.item'); // aqui vai pegar todos os items, detalhe tem que por o "ponto". Pois é classe.
+const dots = document.querySelectorAll('.dot'); //vai pegar os dots
+const numberIndicator = document.querySelector('.numbers'); // pega os numeros
+const list = document.querySelector('.list'); //pegando a lista
 
 
-const botao = document.querySelectorAll('.btn-mais')
+const botao = document.getElementById('mais-btn');
 
 let active = 0;//variavel pra saber quem ta ativo
 const total = items.length //variavel para definir o total dos intems 
@@ -77,9 +77,9 @@ nextButton.addEventListener('click', () => {
     update(1) //chama a função acima update passando o valor 1 pois é o próximo
 })
 
-botao.addEventListener('mouseover', () => {
+//botao.addEventListener('mouseover', () => {
 
 
-    botao.style.background = "#0f0f1e"
-})
+   // botao.style.backgroundColor = 'lightblue';
+//})
 
